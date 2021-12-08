@@ -8,6 +8,8 @@ use Generator;
 
 interface CartInterface
 {
+    public function load(array $items);
+
 	public function add(array $item) : bool;
 
 	public function update(string $id , array $updated_item) : bool;

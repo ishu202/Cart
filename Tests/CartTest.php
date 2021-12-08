@@ -38,7 +38,6 @@ class CartTest extends TestCase
 
         $beforeUpdate = $cart->get();
         $this->assertNotEmpty($beforeUpdate, 'cart_object');
-
     }
 
     public function testUpdateCart()

@@ -5,33 +5,33 @@ namespace Cart;
 
 
 use Cart\Abstracts\CartAbstracts;
-use Cart\Builder\CartBuilder;
 use Cart\Interfaces\CartInterface;
-use Faker\Factory;
+use Exception;
 use Generator;
 
 class Cart extends CartAbstracts implements CartInterface
 {
-
-	public function add(array $item): bool
-	{
-        $items = [];
-        $items[] = $item;
+    public function load(array $items)
+    {
         try {
             $this->builder->set([
                 'cart' => $items
             ]);
             $this->sync_cart_session();
-        }catch (\Exception $exception){
+        }catch (Exception $exception){
             echo $exception->getMessage();
         }
         return true;
+    }
+
+	public function add(array $item): bool
+	{
+        $items = [];
+        $items[] = $item;
+        return $this->load($items);
 	}
 
-    /**
-     * @throws Exceptions\InvalidRentalException
-     * @throws Exceptions\InvalidItemException
-     */
+
     public function update(string $id, array $updated_item): bool
 	{
         $cart = $this->cart_session['cart'];
@@ -44,7 +44,7 @@ class Cart extends CartAbstracts implements CartInterface
                 $this->builder->setItems($cart);
                 $this->sync_cart_session();
                 return true;
-            }catch (\Exception $exception){
+            }catch (Exception $exception){
                 echo $exception->getMessage();
             }
         }
@@ -63,7 +63,7 @@ class Cart extends CartAbstracts implements CartInterface
                 $this->builder->setItems($cart);
                 $this->sync_cart_session();
                 return true;
-            }catch (\Exception $exception){
+            }catch (Exception $exception){
                 echo $exception->getMessage();
             }
         }

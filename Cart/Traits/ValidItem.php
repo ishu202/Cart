@@ -39,4 +39,13 @@ trait ValidItem
         }
         return true;
     }
+
+    public function isValidCart(array $items)
+    {
+        $item_ids = array_column($items , 'id');
+        if (count($item_ids) != array_unique($item_ids)){
+            throw new \Exception("dublicate items found in the cart. unable to add the item");
+        }
+        return count($item_ids) == array_unique($item_ids);
+    }
 }
