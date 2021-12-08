@@ -42,6 +42,7 @@ class Cart extends CartAbstracts implements CartInterface
             $cart[$index] = array_replace($cart[$index] , $updated_item);
             try {
                 $this->builder->setItems($cart);
+                $this->sync_cart_session();
                 return true;
             }catch (\Exception $exception){
                 echo $exception->getMessage();
@@ -52,7 +53,21 @@ class Cart extends CartAbstracts implements CartInterface
 
 	public function remove(string $id): bool
 	{
-		// TODO: Implement remove() method.
+        $cart = $this->cart_session['cart'];
+        $ids = array_column($cart , 'id');
+
+        if (in_array($id , $ids)){
+            $index = array_search($id , $ids);
+            unset($cart[$index]);
+            try {
+                $this->builder->setItems($cart);
+                $this->sync_cart_session();
+                return true;
+            }catch (\Exception $exception){
+                echo $exception->getMessage();
+            }
+        }
+        return false;
 	}
 
 	public function get(?string $id = null): array
@@ -62,6 +77,9 @@ class Cart extends CartAbstracts implements CartInterface
 
 	public function content(): Generator
 	{
-		// TODO: Implement content() method.
+        $cart = $this->cart_session['cart'];
+        foreach ($cart as $item){
+            yield $item;
+        }
 	}
 }

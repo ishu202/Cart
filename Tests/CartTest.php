@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class CartTest extends TestCase
 {
-    public function testAddCart()
+    public function testCart()
     {
         $provider = new CartProvider();
         $factory = new CartFactory();
@@ -36,13 +36,95 @@ class CartTest extends TestCase
 
         $cart->attachTax(7.95);
 
-        $this->assertNotEmpty($cart->get(), 'cart_object');
-        echo var_export($cart->get());
+        $beforeUpdate = $cart->get();
+        $this->assertNotEmpty($beforeUpdate, 'cart_object');
+
+//        $cart->remove($afterUpdate['cart'][0]['id']);
+
+//        $afterRemove = $cart->get();
+
+//        foreach ($cart->content() as $item){
+//            $this->assertNotEmpty($beforeUpdate, 'cart_object_content');
+//        }
+
     }
 
     public function testUpdateCart()
     {
+        $provider = new CartProvider();
+        $factory = new CartFactory();
+        $faker = Factory::create();
+        $cart = $provider->provideCartFactory($factory);
+        $cart->add([
+            'id' => $faker->numberBetween(1 , 5),
+            't_name' => $faker->name('male') ,
+            'overview' => $faker->paragraph() ,
+            'price' => $faker->randomDigit() ,
+            'from' => $faker->date(),
+            'to' => $faker->date(),
+            'pick' => $faker->time(),
+            'drop' => $faker->time(),
+            'duration' => $faker->randomDigit(),
+            'delivery_method' => $faker->randomDigit()
+        ]);
 
+        $beforeUpdate = $cart->get();
+        $cart->update($beforeUpdate['cart'][0]['id'] , [
+            'overview' => 'testing overview update'
+        ]);
+        $afterUpdate = $cart->get();
+
+        $this->assertNotSame($beforeUpdate , $afterUpdate , 'cart_object_update');
+    }
+
+    public function testCartDelete()
+    {
+        $provider = new CartProvider();
+        $factory = new CartFactory();
+        $faker = Factory::create();
+        $cart = $provider->provideCartFactory($factory);
+        $cart->add([
+            'id' => $faker->numberBetween(1 , 5),
+            't_name' => $faker->name('male') ,
+            'overview' => $faker->paragraph() ,
+            'price' => $faker->randomDigit() ,
+            'from' => $faker->date(),
+            'to' => $faker->date(),
+            'pick' => $faker->time(),
+            'drop' => $faker->time(),
+            'duration' => $faker->randomDigit(),
+            'delivery_method' => $faker->randomDigit()
+        ]);
+
+        $beforeUpdate = $cart->get();
+        $cart->remove($beforeUpdate['cart'][0]['id']);
+        $afterUpdate = $cart->get();
+
+        $this->assertNotSameSize($beforeUpdate['cart'] , $afterUpdate['cart'] , 'cart_delete_test');
+    }
+
+    public function testContentGenerator()
+    {
+        $provider = new CartProvider();
+        $factory = new CartFactory();
+        $faker = Factory::create();
+        $cart = $provider->provideCartFactory($factory);
+        $cart->add([
+            'id' => $faker->numberBetween(1 , 5),
+            't_name' => $faker->name('male') ,
+            'overview' => $faker->paragraph() ,
+            'price' => $faker->randomDigit() ,
+            'from' => $faker->date(),
+            'to' => $faker->date(),
+            'pick' => $faker->time(),
+            'drop' => $faker->time(),
+            'duration' => $faker->randomDigit(),
+            'delivery_method' => $faker->randomDigit()
+        ]);
+
+        foreach ($cart->content() as $item){
+            $this->assertNotNull($item);
+        }
     }
 
     public function getCart(\Faker\Generator $faker , $count = 1): array
