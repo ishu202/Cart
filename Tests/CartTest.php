@@ -39,14 +39,6 @@ class CartTest extends TestCase
         $beforeUpdate = $cart->get();
         $this->assertNotEmpty($beforeUpdate, 'cart_object');
 
-//        $cart->remove($afterUpdate['cart'][0]['id']);
-
-//        $afterRemove = $cart->get();
-
-//        foreach ($cart->content() as $item){
-//            $this->assertNotEmpty($beforeUpdate, 'cart_object_content');
-//        }
-
     }
 
     public function testUpdateCart()
