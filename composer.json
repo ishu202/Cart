@@ -1,0 +1,29 @@
+{
+    "name": "ishu202/cart",
+    "description": "cart library to use in any framework as a service",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Cart\\" : "Cart"
+        }
+    },
+    "autoload-dev": {
+        "classmap": [
+            "Tests/"
+        ]
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "require": {
+        "fakerphp/faker": "1.17.x-dev",
+        "ramsey/uuid": "4.x-dev"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "minimum-stability": "dev"
+}
