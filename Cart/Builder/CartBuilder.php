@@ -3,11 +3,12 @@
 namespace Cart\Builder;
 
 use Cart\Abstracts\CartAbstracts;
+use Cart\Abstracts\CartBuilderAbstracts;
 use Cart\Exceptions\InvalidItemException;
 use Cart\Exceptions\InvalidRentalException;
 use stdClass;
 
-class CartBuilder extends CartAbstracts
+class CartBuilder extends CartBuilderAbstracts
 {
     public function reset()
     {
@@ -66,9 +67,12 @@ class CartBuilder extends CartAbstracts
         //it will be an array of fees.
     }
 
-    public function get(): stdClass
+    public function get(): array
     {
-        return $this->data;
+        $this->syncCart();
+        $res = json_decode(json_encode($this->data), true);
+        ksort($res);
+        return $res;
     }
 
     /**
@@ -80,10 +84,14 @@ class CartBuilder extends CartAbstracts
         $this->reset();
         if (array_key_exists('customer' , $param)){
             $this->setCustomer($param['customer']);
+            $has[] = 'customer';
         }
-        $this->setItems($param['cart'])
-            ->setFees($param['fees'])
-            ->setTaxPercentage($param['tax_percent']);
+        $this->setItems($param['cart']);
+        if (array_key_exists('fees' , $param)){
+            $this->setFees($param['fees']);
+        }
+
+        $this->setTaxPercentage(@$param['tax_percent'] ?: 0);
 
         if (array_key_exists('in_cart' , $param)){
             $this->setInCart($param['in_cart']);

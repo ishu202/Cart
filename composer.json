@@ -18,7 +18,8 @@
     },
     "require": {
         "fakerphp/faker": "1.17.x-dev",
-        "ramsey/uuid": "4.x-dev"
+        "ramsey/uuid": "4.x-dev",
+        "ext-json": "*"
     },
     "config": {
         "preferred-install": "dist",

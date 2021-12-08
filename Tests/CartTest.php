@@ -11,26 +11,38 @@ use PHPUnit\Framework\TestCase;
 
 class CartTest extends TestCase
 {
-    public function testCartBuilder()
+    public function testAddCart()
     {
         $provider = new CartProvider();
         $factory = new CartFactory();
         $faker = Factory::create();
-        $cart = $provider->provideCartFactory($factory , [
-            'customer' => [],
-            'cart' => [],
-            'in_cart' => true
+        $cart = $provider->provideCartFactory($factory);
+        $cart->add([
+            'id' => $faker->numberBetween(1 , 5),
+            't_name' => $faker->name('male') ,
+            'overview' => $faker->paragraph() ,
+            'price' => $faker->randomDigit() ,
+            'from' => $faker->date(),
+            'to' => $faker->date(),
+            'pick' => $faker->time(),
+            'drop' => $faker->time(),
+            'duration' => $faker->randomDigit(),
+            'delivery_method' => $faker->randomDigit()
         ]);
-        $cart = new CartBuilder();
 
-        $cart->set([
-            'cart' => $this->getCart($faker , 3),
-            'tax_percent' => 7.95,
-            'fees' => $this->addFees($faker , 3)
-        ]);
+        $cart->attachCustomer($this->getCustomer($faker));
+
+        $cart->attachFees($this->addFees($faker));
+
+        $cart->attachTax(7.95);
 
         $this->assertNotEmpty($cart->get(), 'cart_object');
         echo var_export($cart->get());
+    }
+
+    public function testUpdateCart()
+    {
+
     }
 
     public function getCart(\Faker\Generator $faker , $count = 1): array
