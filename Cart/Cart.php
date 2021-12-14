@@ -28,7 +28,15 @@ class Cart extends CartAbstracts implements CartInterface
 	{
         $items = [];
         $items[] = $item;
-        return $this->load($items);
+        try {
+            $this->builder->set([
+                'cart' => $items
+            ]);
+            $this->sync_cart_session();
+        }catch (Exception $exception){
+            echo $exception->getMessage();
+        }
+        return true;
 	}
 
 

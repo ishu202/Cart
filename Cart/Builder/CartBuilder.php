@@ -36,7 +36,7 @@ class CartBuilder extends CartBuilderAbstracts
             $this->data->cart = [];
         }
         foreach($params as $item){
-            if ($this->isValidItem($item) && $this->isValidRental($item) && $this->isValidCart($item)){
+            if ($this->isValidRental($item) && $this->isValidCart($item)){
                 $this->data->cart[] = $item;
             }
         }

@@ -32,8 +32,7 @@ trait ValidItem
         ];
         $keys = array_keys($item);
         foreach ($exceptionKeys as $key){
-            if (array_search($key , $keys) == -1){
-                var_dump($keys);
+            if (!in_array($key , $keys)){
                 throw new InvalidRentalException();
             }
         }
@@ -43,9 +42,9 @@ trait ValidItem
     public function isValidCart(array $items)
     {
         $item_ids = array_column($items , 'id');
-        if (count($item_ids) != array_unique($item_ids)){
+        if (count($item_ids) != count(array_unique($item_ids))){
             throw new \Exception("dublicate items found in the cart. unable to add the item");
         }
-        return count($item_ids) == array_unique($item_ids);
+        return true;
     }
 }
